@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kuis PAI Kelas X - Bab 6 sampai 10</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #22c55e;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --indigo: #4f46e5;
+    --yellow: #f59e0b;
+    --bg: #f0f4ff;
+    --card: #ffffff;
+    --text: #1e1b4b;
+    --sub: #6b7280;
+    --border: #e0e7ff;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(79,70,229,0.10);
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    padding: 28px 20px 22px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(79,70,229,0.25);
+  }
+  .header h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: 0.01em; }
+  .header p { font-size: 0.72rem; opacity: 0.85; margin-top: 3px; font-weight: 400; }
+
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.25);
+    border-radius: 99px;
+    height: 8px;
+    margin: 14px auto 0;
+    max-width: 360px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: #a5f3fc;
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-size: 0.68rem;
+    margin-top: 6px;
+    opacity: 0.85;
+  }
+
+  /* === TABS === */
+  .tabs-wrap {
+    display: flex;
+    overflow-x: auto;
+    gap: 6px;
+    padding: 14px 16px 4px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .tabs-wrap::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 7px 16px;
+    border-radius: 99px;
+    border: 2px solid var(--border);
+    background: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--sub);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    background: var(--indigo);
+    border-color: var(--indigo);
+    color: white;
+    box-shadow: 0 2px 8px rgba(79,70,229,0.25);
+  }
+
+  /* === SCORE SUMMARY === */
+  .score-summary {
+    display: flex;
+    gap: 8px;
+    padding: 10px 16px;
+    justify-content: center;
+  }
+  .score-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 99px;
+    background: white;
+    border: 2px solid var(--border);
+    color: var(--sub);
+  }
+  .score-chip .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .score-chip.correct { border-color: #bbf7d0; background: #f0fdf4; color: #16a34a; }
+  .score-chip.correct .dot { background: var(--green); }
+  .score-chip.wrong { border-color: #fecaca; background: #fef2f2; color: #dc2626; }
+  .score-chip.wrong .dot { background: var(--red); }
+  .score-chip.unanswered { border-color: var(--border); background: white; color: var(--sub); }
+  .score-chip.unanswered .dot { background: #d1d5db; }
+
+  /* === QUESTION CONTAINER === */
+  .questions-container {
+    padding: 8px 16px 100px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* === QUESTION CARD === */
+  .question-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    border: 1.5px solid var(--border);
+    transition: transform 0.2s;
+  }
+  .question-card.answered-correct { border-color: #bbf7d0; }
+  .question-card.answered-wrong { border-color: #fecaca; }
+
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .q-num {
+    background: var(--indigo);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 99px;
+  }
+  .q-bab {
+    font-size: 0.65rem;
+    color: var(--sub);
+    font-weight: 500;
+  }
+  .q-status-icon {
+    margin-left: auto;
+    font-size: 1.1rem;
+  }
+
+  .q-text {
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .q-ayat {
+    font-family: 'Amiri', 'Scheherazade New', serif;
+    font-size: 1.05rem;
+    text-align: right;
+    direction: rtl;
+    background: #f8f7ff;
+    border-left: 3px solid var(--indigo);
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 10px 0;
+    line-height: 1.9;
+    color: #312e81;
+  }
+
+  /* === OPTIONS === */
+  .options-list {
+    list-style: none;
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .option-btn {
+    width: 100%;
+    text-align: left;
+    padding: 11px 14px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: #f8f9ff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.77rem;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .option-btn:hover:not(:disabled) {
+    background: #eef2ff;
+    border-color: var(--indigo);
+    transform: translateX(2px);
+  }
+  .option-btn:disabled { cursor: default; }
+  .option-btn .opt-letter {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--sub);
+    transition: all 0.18s;
+  }
+  .option-btn .opt-text { flex: 1; }
+
+  .option-btn.correct-answer {
+    background: #f0fdf4;
+    border-color: var(--green);
+    color: #15803d;
+  }
+  .option-btn.correct-answer .opt-letter {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+  .option-btn.wrong-answer {
+    background: #fef2f2;
+    border-color: var(--red);
+    color: #b91c1c;
+  }
+  .option-btn.wrong-answer .opt-letter {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+  }
+  .option-btn.dimmed {
+    opacity: 0.45;
+  }
+
+  /* === FEEDBACK === */
+  .feedback-box {
+    margin-top: 12px;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.75rem;
+    line-height: 1.55;
+    display: none;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.correct {
+    background: #f0fdf4;
+    border: 1.5px solid #bbf7d0;
+    color: #166534;
+  }
+  .feedback-box.wrong {
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    color: #991b1b;
+  }
+  .feedback-header {
+    font-weight: 700;
+    font-size: 0.82rem;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .feedback-penjelasan {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(0,0,0,0.12);
+    color: inherit;
+    opacity: 0.85;
+  }
+  .feedback-penjelasan strong { font-weight: 600; }
+
+  /* === RESET BUTTON === */
+  .reset-btn {
+    display: block;
+    margin: 0 auto 16px;
+    padding: 11px 28px;
+    background: var(--indigo);
+    color: white;
+    border: none;
+    border-radius: 99px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(79,70,229,0.3);
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(79,70,229,0.35); }
+  .reset-btn:active { transform: translateY(0); }
+
+  /* === FINAL SCORE CARD === */
+  .final-score-card {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 32px rgba(79,70,229,0.3);
+  }
+  .final-score-card h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .final-score-big { font-size: 3rem; font-weight: 800; line-height: 1; margin: 10px 0; }
+  .final-score-card p { font-size: 0.8rem; opacity: 0.85; }
+
+  /* === EMPTY STATE === */
+  .empty-tab {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--sub);
+    font-size: 0.82rem;
+  }
+  .empty-tab .emoji { font-size: 3rem; display: block; margin-bottom: 12px; }
+
+  @media (max-width: 380px) {
+    .header h1 { font-size: 1rem; }
+    .q-text { font-size: 0.78rem; }
+    .option-btn { font-size: 0.73rem; padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📚 Kuis PAI Kelas X</h1>
+  <p>Bab 6–10 · Kurikulum Merdeka · Total 50 Soal</p>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">0 dari 50 soal dijawab</div>
+</div>
+
+<div class="tabs-wrap" id="tabsWrap"></div>
+
+<div class="score-summary" id="scoreSummary">
+  <div class="score-chip correct"><span class="dot"></span><span id="correctCount">0</span> Benar</div>
+  <div class="score-chip wrong"><span class="dot"></span><span id="wrongCount">0</span> Salah</div>
+  <div class="score-chip unanswered"><span class="dot"></span><span id="unansweredCount">50</span> Belum</div>
+</div>
+
+<div class="questions-container" id="questionsContainer"></div>
+
+<script>
+const ALL_QUESTIONS = [
+  // ===== BAB 6 =====
+  {
+    bab: 6, babTitle: "Bab 6: Menjauhi Zina",
+    text: "Perhatikan Q.S. al-Isra'/17: 32 berikut! وَلَا تَقْرَبُوا الزِّنٰىٓ اِنَّهٗ كَانَ فَاحِشَةً ۗ وَسَآءَ سَبِيْلًا — Ayat tersebut berisi larangan tentang...",
+    ayat: "وَلَا تَقْرَبُوا الزِّنٰىٓ اِنَّهٗ كَانَ فَاحِشَةً ۗ وَسَآءَ سَبِيْلًا",
+    options: ["Mendekati zina","Perbuatan zina","Dampak zina","Hukuman zina","Jenis-jenis zina"],
+    answer: 0,
+    penjelasan: "Di ayatnya ada kata Wala taqrabu yang artinya 'janganlah kamu mendekati'. Jadi pintunya aja udah digembok — ngedeketin aja kagak boleh, apalagi masuk!"
+  },
+  {
+    bab: 6, babTitle: "Bab 6: Menjauhi Zina",
+    text: "Berdasarkan Q.S. al-Isra'/17: 32, zina disebut sebagai perbuatan yang...",
+    options: ["Kotor dan merusak","Keji dan suatu jalan yang buruk","Dosa besar dan mengancam","Dilarang dan diancam sanksi","Merugikan diri sendiri dan orang lain"],
+    answer: 1,
+    penjelasan: "Arti dari 'faahishatan wa saa-a sabiilaa' = perbuatan yang keji dan jalan yang buruk. Udah paten dari sananya, zina itu ngerusak tatanan sosial dan moral."
+  },
+  {
+    bab: 6, babTitle: "Bab 6: Menjauhi Zina",
+    text: "Hukuman bagi pelaku zina ghairu muhsan menurut Q.S. an-Nur/24: 2 adalah...",
+    ayat: "اَلزَّانِيَةُ وَالزَّانِيْ فَاجْلِدُوْا كُلَّ وَاحِدٍ مِّنْهُمَا مِائَةَ جَلْدَةٍ",
+    options: ["Dirajam sampai mati","Denda yang besar","Dikucilkan masyarakat","Dicambuk 100 kali","Dipenjara seumur hidup"],
+    answer: 3,
+    penjelasan: "Kata 'mi-ata jaldah' artinya 100 kali cambukan. Ini khusus buat yang ghairu muhsan alias masih single tapi udah berani macem-macem."
+  },
+  {
+    bab: 6, babTitle: "Bab 6: Menjauhi Zina",
+    text: "Pelaku perzinaan yang sudah pernah menikah secara sah disebut dengan istilah...",
+    options: ["Zina ghairu muhsan","Zina muhsan","Zina biasa","Zina besar","Zina syubhat"],
+    answer: 1,
+    penjelasan: "Muhsan = orang yang udah pernah menikah secara sah tapi masih melakukan zina. Rumus gampang: Muhsan = punya pasangan sah tapi masih jajan di luar."
+  },
+  {
+    bab: 6, babTitle: "Bab 6: Menjauhi Zina",
+    text: "Sanksi hukum rajam (dilempari batu sampai mati) diterapkan kepada pelaku zina...",
+    options: ["Ghairu muhsan","Khifaf","Muhsan","Syubhat","Maslahah"],
+    answer: 2,
+    penjelasan: "Statusnya udah nikah tapi tetep zina, jadi sanksinya paling berat dalam syariat yaitu rajam. Ini efek jera tingkat tertinggi."
+  },
+  {
+    bab: 6, babTitle: "Bab 6: Menjauhi Zina",
+    text: "Dampak psikologis (kejiwaan) yang langsung dirasakan oleh pelaku zina adalah...",
+    options: ["Merasa bangga dan hebat","Merasa tenang dan tenteram","Dihantui rasa bersalah dan gelisah","Mendapat pujian dari teman-temannya","Menjadi terkenal di media sosial"],
+    answer: 2,
+    penjelasan: "Gak ada orang abis zina hatinya tenang. Pasti was-was, takut ketahuan, ngerasa kotor, dan dihantui rasa bersalah. Hati gak bisa bohong!"
+  },
+  {
+    bab: 6, babTitle: "Bab 6: Menjauhi Zina",
+    text: "Di bawah ini yang merupakan salah satu dampak zina di dunia adalah...",
+    options: ["Hilangnya cahaya (wibawa) pada wajah pelaku","Langsung masuk neraka tanpa hisab","Mendapat siksa kubur yang pedih","Terbebas dari tuntutan hukum formal","Dikasih kelapangan rezeki oleh Allah Swt."],
+    answer: 0,
+    penjelasan: "Dampak di dunia salah satunya hilangnya kharisma atau nur (cahaya) di wajah. Kelihatan kusam dan gak berwibawa karena nanggung dosa besar."
+  },
+  {
+    bab: 6, babTitle: "Bab 6: Menjauhi Zina",
+    text: "Salah satu upaya preventif (pencegahan) agar terhindar dari pergaulan bebas dan zina adalah...",
+    options: ["Sering nongkrong sampai larut malam","Menjaga pandangan dan menutup aurat dengan benar","Mengikuti semua tren di media sosial tanpa filter","Bebas berteman dengan siapa saja tanpa batasan","Menjauhi kegiatan keagamaan di sekolah"],
+    answer: 1,
+    penjelasan: "Namanya pencegahan, bentengnya ada di mata dan pakaian. Kalau mata dijaga dan aurat ditutup rapi, kesempatan buat terpancing zina jadi makin kecil."
+  },
+  {
+    bab: 6, babTitle: "Bab 6: Menjauhi Zina",
+    text: "Pergaulan bebas bagi remaja masa kini dapat memicu terjadinya...",
+    options: ["Prestasi akademik yang melonjak","Keharmonisan hubungan keluarga","Kehamilan di luar nikah dan aborsi","Peningkatan ekonomi keluarga","Kedewasaan berpikir yang cepat"],
+    answer: 2,
+    penjelasan: "Efek domino dari pacaran kelewat batas ujung-ujungnya hamil duluan. Karena panik, setan bisikin lagi buat aborsi (pembunuhan janin). Rusak kuadrat!"
+  },
+  {
+    bab: 6, babTitle: "Bab 6: Menjauhi Zina",
+    text: "Menjaga kehormatan diri (iffah) dalam kehidupan sehari-hari dapat dilakukan dengan cara...",
+    options: ["Menyendiri dan tidak mau berteman sama sekali","Membatasi diri hanya bergaul dengan orang kaya","Selektif memilih teman dan menyibukkan diri dengan aktivitas positif","Selalu memakai pakaian yang mahal dan mewah","Mengikuti gaya hidup orang barat agar dibilang keren"],
+    answer: 2,
+    penjelasan: "Biar gak kebawa arus, kudu pinter milih tongkrongan. Cari temen yang ngajak bener, terus sibukin diri ikut ekskul atau olahraga biar gak ada waktu kosong."
+  },
+
+  // ===== BAB 7 =====
+  {
+    bab: 7, babTitle: "Bab 7: Mahabbah, Khauf, Raja', Tawakal",
+    text: "Tingkatan cinta tertinggi bagi seorang mukmin yang mendominasi seluruh ruang hatinya harus diberikan kepada...",
+    options: ["Orang tua","Pasangan hidup","Harta benda","Allah Swt.","Diri sendiri"],
+    answer: 3,
+    penjelasan: "Cinta ke makhluk itu cabang, batang utamanya cuma ke Allah Swt. (Mahabbatullah). Mukmin sejati itu kalau disebut nama Allah, hatinya langsung bergetar."
+  },
+  {
+    bab: 7, babTitle: "Bab 7: Mahabbah, Khauf, Raja', Tawakal",
+    text: "Salah satu bukti seseorang memiliki rasa cinta (mahabbah) kepada Allah Swt. adalah...",
+    options: ["Selalu mengeluh saat ditimpa musibah","Mendahulukan perintah Allah di atas urusan duniawi","Beribadah hanya ketika dilihat orang lain","Menumpuk harta demi kesenangan pribadi","Malas melaksanakan ibadah sunah"],
+    answer: 1,
+    penjelasan: "Kalau cinta sama Allah, pas adzan berkumandang (perintah Allah), langsung tinggalin game atau nongkrong. Itu baru namanya cinta asli!"
+  },
+  {
+    bab: 7, babTitle: "Bab 7: Mahabbah, Khauf, Raja', Tawakal",
+    text: "Sifat khauf secara bahasa memiliki arti...",
+    options: ["Berharap","Pasrah","Takut","Cinta","Ikhlas"],
+    answer: 2,
+    penjelasan: "Khauf artinya takut. Dalam istilah agama, maksudnya takut sama siksaan dan murka Allah gara-gara dosa-dosa yang kita perbuat."
+  },
+  {
+    bab: 7, babTitle: "Bab 7: Mahabbah, Khauf, Raja', Tawakal",
+    text: "Seseorang yang memiliki sifat khauf akan menampakkan perilaku...",
+    options: ["Meremehkan dosa-dosa kecil","Berani melanggar aturan agama secara terang-terangan","Berhati-hati dalam bertindak agar tidak bermaksiat","Merasa dirinya paling suci dan pasti masuk surga","Putus asa dari rahmat Allah Swt."],
+    answer: 2,
+    penjelasan: "Karena punya rasa takut yang sehat sama Allah, dia gak bakal bertindak ngawur. Tiap mau berbuat sesuatu, dia mikir: 'Ini bikin Allah marah kagak ya?' Jadi super hati-hati."
+  },
+  {
+    bab: 7, babTitle: "Bab 7: Mahabbah, Khauf, Raja', Tawakal",
+    text: "Sifat raja' dalam konsep akhlak Islam artinya...",
+    options: ["Merasa paling berkuasa","Mengharap rahmat, ampunan, dan ridha Allah Swt.","Pasrah tanpa melakukan usaha apa pun","Takut secara berlebihan kepada masa depan","Menuntut hak tanpa melaksanakan kewajiban"],
+    answer: 1,
+    penjelasan: "Raja' artinya berharap optimis. Lu tahu lu banyak dosa, tapi tetep husnuzan dan berharap banget sama ampunan dan kasih sayang Allah yang luasnya gak bertepi."
+  },
+  {
+    bab: 7, babTitle: "Bab 7: Mahabbah, Khauf, Raja', Tawakal",
+    text: "Perpaduan yang seimbang antara sifat khauf dan raja' akan melahirkan sikap...",
+    options: ["Sombong dan angkuh","Malas beribadah karena merasa aman","Optimis dalam beramal dan takut berbuat dosa","Putus asa dan frustrasi dalam hidup","Masa bodoh terhadap aturan agama"],
+    answer: 2,
+    penjelasan: "Gara-gara ada raja', jadi semangat beramal (optimis berpahala). Gara-gara ada khauf, ngerem pas ada tarikan maksiat (takut dosa). Inilah keseimbangan iman!"
+  },
+  {
+    bab: 7, babTitle: "Bab 7: Mahabbah, Khauf, Raja', Tawakal",
+    text: "Menyerahkan segala urusan kepada Allah Swt. setelah melakukan ikhtiar atau usaha secara maksimal disebut...",
+    options: ["Qana'ah","Istiqamah","Ikhlas","Tawakal","Syukur"],
+    answer: 3,
+    penjelasan: "Kata kuncinya: 'setelah melakukan usaha maksimal'. Daftar dulu, belajar dulu, baru pasrahin hasilnya ke Allah. Itulah tawakal yang bener, bukan pasrah dari awal."
+  },
+  {
+    bab: 7, babTitle: "Bab 7: Mahabbah, Khauf, Raja', Tawakal",
+    text: "Ayat فَاِذَا عَزَمْتَ فَتَوَكَّلْ عَلَى اللّٰهِ menegaskan bahwa perintah bertawakal dilakukan setelah...",
+    ayat: "فَاِذَا عَزَمْتَ فَتَوَكَّلْ عَلَى اللّٰهِ",
+    options: ["Tertimpa musibah yang berat","Mendapatkan nikmat yang banyak","Mempunyai niat dan tekad yang bulat (setelah usaha)","Orang lain memberikan bantuan","Selesai melaksanakan salat lima waktu"],
+    answer: 2,
+    penjelasan: "Arti ayat: 'Kemudian, apabila engkau telah membulatkan tekad, maka bertawakallah kepada Allah.' Tekad bulat artinya udah usaha dan mikir mateng-mateng dulu."
+  },
+  {
+    bab: 7, babTitle: "Bab 7: Mahabbah, Khauf, Raja', Tawakal",
+    text: "Salah satu keuntungan orang yang memiliki sifat tawakal dalam hidupnya adalah...",
+    options: ["Tidak pernah mengalami kegagalan","Hidupnya selalu gelisah memikirkan hasil","Memiliki jiwa yang tenang dan tidak mudah stres saat gagal","Dihormati oleh seluruh makhluk di bumi","Mendapatkan kekayaan tanpa perlu bekerja keras"],
+    answer: 2,
+    penjelasan: "Orang tawakal itu mentalnya baja. Kalau sukses, bersyukur (gak sombong). Kalau gagal, gak bakal depresi, karena tahu itu udah takdir terbaik dari Allah. Hatinya auto-adem."
+  },
+  {
+    bab: 7, babTitle: "Bab 7: Mahabbah, Khauf, Raja', Tawakal",
+    text: "Di bawah ini yang merupakan contoh penerapan sifat raja' yang SALAH adalah...",
+    options: ["Rajin belajar lalu berharap lulus ujian dengan nilai terbaik","Rajin beristighfar dan berharap dosanya diampuni Allah Swt.","Sengaja meninggalkan salat tapi berharap tetap masuk surga","Giat bekerja dan berharap rezekinya berkah","Menjauhi maksiat dan berharap mendapat ridha Allah Swt."],
+    answer: 2,
+    penjelasan: "Ini raja' gadungan alias ngelindur! Mana ada gak pernah nanem padi tapi ngarep panen padi. Gak salat tapi ngarep surga itu namanya ngeledek hukum alam."
+  },
+
+  // ===== BAB 8 =====
+  {
+    bab: 8, babTitle: "Bab 8: Pergaulan, Miras & Narkoba",
+    text: "Salah satu faktor internal yang melatarbelakangi terjadinya perkelahian antarpelajar adalah...",
+    options: ["Kurangnya pengawasan dari aparat keamanan di sekitar sekolah","Adanya provokasi dari alumni atau kelompok luar sekolah","Tidak adanya sanksi yang tegas dari pihak manajemen sekolah","Lemahnya pertahanan diri dalam mengendalikan emosi dan frustrasi","Pengaruh tontonan media sosial yang sarat dengan kekerasan"],
+    answer: 3,
+    penjelasan: "Faktor internal artinya dari dalam diri sendiri. Anak muda yang gampang tawuran biasanya karena mental belum mateng, sumbunya pendek, alias kagak bisa ngerem emosi."
+  },
+  {
+    bab: 8, babTitle: "Bab 8: Pergaulan, Miras & Narkoba",
+    text: "Penanganan perkelahian antarpelajar harus mengutamakan aspek preventif, yaitu...",
+    options: ["Mengeluarkan siswa yang terlibat tawuran dari sekolah","Melibatkan polisi untuk menjaga gerbang sekolah setiap hari","Memberikan ruang bagi pelajar untuk menyalurkan bakat dan minatnya secara positif","Membangun pagar sekolah yang tinggi agar siswa tidak bisa bolos","Memberikan denda finansial yang berat kepada orang tua pelaku"],
+    answer: 2,
+    penjelasan: "Preventif = pencegahan sebelum kejadian. Daripada energi anak muda dipake buat saling jotos, mending dikasih wadah yang asyik kaya ekskul musik, olahraga, atau seni."
+  },
+  {
+    bab: 8, babTitle: "Bab 8: Pergaulan, Miras & Narkoba",
+    text: "Semua jenis minuman atau benda yang memabukkan dan dapat merusak akal pikiran manusia, dalam istilah hukum Islam disebut...",
+    options: ["Narkotika","Khamr","Maksiat","Syubhat","Rijs"],
+    answer: 1,
+    penjelasan: "Ini istilah paten dalam fikih. Pokoknya segala hal yang bikin akal korslet, mau bentuknya cairan, pil, atau hirupan — payung hukumnya disebut khamr."
+  },
+  {
+    bab: 8, babTitle: "Bab 8: Pergaulan, Miras & Narkoba",
+    text: "Kandungan hukum dari hadis مَا أَسْكَرَ كَثِيرُهُ فَقَلِيلُهُ حَرَامٌ menyatakan bahwa...",
+    ayat: "مَا أَسْكَرَ كَثِيرُهُ فَقَلِيلُهُ حَرَامٌ",
+    options: ["Minuman keras hanya haram jika diminum dalam jumlah banyak","Zat yang memabukkan dalam jumlah sedikit hukumnya tetap haram","Boleh meminum khamr asalkan tidak sampai mabuk parah","Khamr hukumnya makruh apabila digunakan untuk obat herbal","Minuman tradisional yang memabukkan mendapat dispensasi hukum"],
+    answer: 1,
+    penjelasan: "Arti hadis: 'Apa yang banyaknya memabukkan, maka sedikitnya pun haram.' Gak ada alasan 'ah cuma setetes kok'. Mau setetes atau seember, tetep HARAM tanpa celah."
+  },
+  {
+    bab: 8, babTitle: "Bab 8: Pergaulan, Miras & Narkoba",
+    text: "Khamr disebut sebagai ummul khaba'its karena...",
+    options: ["Harganya yang sangat mahal dan sulit didapatkan","Merupakan tradisi turun-menurun sejak zaman jahiliyah","Menjadi akar atau induk dari berbagai tindakan kejahatan lainnya","Hanya dikonsumsi oleh kelompok masyarakat kelas bawah","Proses pembuatannya memerlukan waktu yang sangat lama"],
+    answer: 2,
+    penjelasan: "Ummul khaba'its = ibunya atau biang kerok segala kejahatan. Kenapa? Karena pas orang mabok, akalnya ilang. Pas akal ilang, dia bisa ngebunuh atau merampok tanpa rasa bersalah."
+  },
+  {
+    bab: 8, babTitle: "Bab 8: Pergaulan, Miras & Narkoba",
+    text: "Dampak sosial yang paling nyata dari pecandu narkoba adalah...",
+    options: ["Menjadi lebih kreatif dan produktif dalam bekerja","Hubungannya dengan keluarga dan masyarakat menjadi rusak","Mendapatkan penghargaan dari lingkungan sekitar","Kekayaan ekonominya semakin bertambah pesat","Kondisi fisiknya menjadi semakin sehat dan kuat"],
+    answer: 1,
+    penjelasan: "Pecandu narkoba hidupnya dipenuhi kecurigaan dan kebohongan. Ujung-ujungnya bikin nangis orang tua, musuhan ama keluarga, dan dijauhin tetangga."
+  },
+  {
+    bab: 8, babTitle: "Bab 8: Pergaulan, Miras & Narkoba",
+    text: "Narkoba dilarang dalam Islam berdasarkan analogi (qiyas) terhadap larangan khamr, karena keduanya memiliki kesamaan dalam hal...",
+    options: ["Bentuk zat dan cara pembuatannya","Harga jualnya yang sama-sama mahal di pasaran","Dampak negatifnya yang sama-sama merusak akal pikiran ('illah)","Cara mengonsumsinya yang harus diminum","Sejarah perkembangannya di masa lalu"],
+    answer: 2,
+    penjelasan: "Zaman Nabi dulu kagak ada sabu atau ekstasi. Tapi narkoba haram karena di-qiyas-kan (disamakan) dengan khamr. Dua-duanya punya 'illah yang sama: bikin akal ngeblank dan merusak badan."
+  },
+  {
+    bab: 8, babTitle: "Bab 8: Pergaulan, Miras & Narkoba",
+    text: "Salah satu cara efektif bagi lingkungan sekolah untuk membentengi siswa dari bahaya narkoba adalah...",
+    options: ["Merahasiakan jika ada siswa yang kedapatan menjadi pecandu","Mengadakan penyuluhan berkala tentang bahaya narkoba bekerja sama dengan BNN","Memberikan hukuman fisik di lapangan terbuka bagi yang mencurigakan","Melarang siswa membawa uang jajan ke sekolah","Memperbanyak jam kosong agar siswa tidak stres belajar"],
+    answer: 1,
+    penjelasan: "Biar siswa gak gampang dibohongin bandar, sekolah kudu rajin edukasi bareng ahlinya seperti BNN. Kalau tahu seremnya efek narkoba, bakal mikir sejuta kali buat nyoba."
+  },
+  {
+    bab: 8, babTitle: "Bab 8: Pergaulan, Miras & Narkoba",
+    text: "Dalam Q.S. al-Ma'idah/5: 90, khamr, judi, berkorban untuk berhala, dan mengundi nasib disebut sebagai perbuatan yang...",
+    options: ["Biasa saja dilakukan asal tahu batasannya","Termasuk perbuatan keji dan merupakan perbuatan setan","Diperbolehkan jika dalam keadaan darurat yang mendesak","Mendatangkan keuntungan finansial yang besar bagi pelakunya","Diampuni dosanya tanpa perlu melakukan tobat nasuha"],
+    answer: 1,
+    penjelasan: "Ayatnya menyebut 'rijsun min 'amalisy-syaithan' = perbuatan keji yang merupakan kerjaannya setan. Jadi kalau masih doyan mabok atau judi, kamu lagi jadi asistennya setan!"
+  },
+  {
+    bab: 8, babTitle: "Bab 8: Pergaulan, Miras & Narkoba",
+    text: "Sikap tegas yang harus diambil oleh seorang pelajar ketika ditawari narkoba oleh temannya adalah...",
+    options: ["Menerimanya demi menjaga perasaan teman agar tidak tersinggung","Mencobanya sedikit saja untuk memuaskan rasa penasaran","Menolak dengan halus dan tidak perlu melaporkannya kepada siapa pun","Menolak dengan tegas, menjauhinya, dan melaporkan ke pihak berwenang/guru","Pura-pura pingsan agar terhindar dari tawaran tersebut"],
+    answer: 3,
+    penjelasan: "Gak usah takut dibilang cemen. Kalau urusan narkoba, harus saklek: Tolak mentah-mentah, jauhin itu orang, terus laporin ke guru BK atau ortu."
+  },
+
+  // ===== BAB 9 =====
+  {
+    bab: 9, babTitle: "Bab 9: Walisongo",
+    text: "Pendekatan utama yang digunakan oleh Walisongo agar Islam mudah diterima oleh masyarakat lokal adalah melalui...",
+    options: ["Penaklukan militer dan perang terbuka","Pemaksaan hukum adat yang baru secara ketat","Akulturasi budaya tanpa merusak tradisi lokal secara frontal","Pemberian bantuan uang kepada seluruh warga asli","Pengosongan candi-candi Hindu untuk dijadikan masjid"],
+    answer: 2,
+    penjelasan: "Walisongo gak datang bawa pedang. Mereka masuk lewat budaya (wayang, gamelan, adat) yang kontennya dialihin pelan-pelan jadi muatan Islam. Strateginya halus dan damai."
+  },
+  {
+    bab: 9, babTitle: "Bab 9: Walisongo",
+    text: "Strategi awal Sunan Gresik (Maulana Malik Ibrahim) untuk mendekati masyarakat jelata adalah melalui jalur...",
+    options: ["Kesenian dan sastra tingkat tinggi","Perdagangan, pertanian, dan pengobatan gratis","Pernikahan dengan putri-putri raja Majapahit","Birokrasi pemerintahan kerajaan","Pendirian pondok pesantren megah di kota besar"],
+    answer: 1,
+    penjelasan: "Beliau paham kalau mau deket ama rakyat bawah, kudu bantu urusan perut dan kesehatan mereka dulu. Makanya jualan jujur, ngajarin bertani, dan ngobatin orang sakit gratis."
+  },
+  {
+    bab: 9, babTitle: "Bab 9: Walisongo",
+    text: "Tokoh Walisongo yang dikenal sebagai arsitek perancang Masjid Agung Demak dan menanamkan nilai Islam melalui media Wayang Kulit adalah...",
+    options: ["Sunan Ampel","Sunan Giri","Sunan Bonang","Sunan Kalijaga","Sunan Muria"],
+    answer: 3,
+    penjelasan: "Sunan Kalijaga itu maestro seni. Beliau dalang wayang kulit yang pinter nyisipin rukun Islam dan kisah-kisah islami ke dalam tokoh pewayangan, sekaligus arsitek Masjid Agung Demak."
+  },
+  {
+    bab: 9, babTitle: "Bab 9: Walisongo",
+    text: "Sunan Ampel menanamkan falsafah dakwah yang sangat terkenal untuk memperbaiki moral masyarakat, yang dikenal dengan istilah...",
+    options: ["Moh Limo","Sekaten","Tembang Dolanan","Suluk Linglung","Babad Tanah Jawi"],
+    answer: 0,
+    penjelasan: "Moh Limo artinya 'Gak mau ngelakuin 5 hal buruk': Moh Main (judi), Moh Ngombe (mabok), Moh Maling (nyolong), Moh Madat (narkoba), Moh Madon (zina)."
+  },
+  {
+    bab: 9, babTitle: "Bab 9: Walisongo",
+    text: "Gamelan Bonang yang digunakan untuk mengumpulkan masyarakat sebelum dakwah dimulai merupakan warisan strategi dakwah dari...",
+    options: ["Sunan Kudus","Sunan Bonang","Sunan Drajat","Sunan Gunung Jati","Sunan Kalijaga"],
+    answer: 1,
+    penjelasan: "Pas sama namanya! Sunan Bonang memodifikasi alat musik gamelan biar ngeluarin suara merdu. Begitu warga kumpul dengerin musiknya, baru disisipin dakwah Islam yang adem."
+  },
+  {
+    bab: 9, babTitle: "Bab 9: Walisongo",
+    text: "Sunan Kudus memiliki cara yang unik dalam menjaga toleransi dengan umat Hindu di wilayahnya, yaitu dengan cara...",
+    options: ["Mewajibkan umat Islam beribadah di candi","Melarang umat Islam menyembelih sapi saat Idul Adha","Menghapus hari raya kurban dalam kalender Islam","Membangun menara masjid yang mirip dengan menara gereja","Memaksa umat Hindu untuk pindah agama secara massal"],
+    answer: 1,
+    penjelasan: "Sapi itu hewan suci bagi umat Hindu. Demi menghormati perasaan tetangga yang Hindu, Sunan Kudus melarang jamaahnya motong sapi, diganti pake kerbau. Toleransi tingkat dewa!"
+  },
+  {
+    bab: 9, babTitle: "Bab 9: Walisongo",
+    text: "Tembang cilik seperti Cublak-cublak Suweng dan permainan anak-anak yang bernuansa islami merupakan warisan dakwah dari...",
+    options: ["Sunan Giri","Sunan Muria","Sunan Ampel","Sunan Gresik","Sunan Bonang"],
+    answer: 0,
+    penjelasan: "Sunan Giri kreatif banget, beliau dakwah menyasar dunia anak-anak. Beliau nyiptain lagu dolanan kaya Cublak-cublak Suweng dan Jamuran yang ada pesan moral dan spiritualnya."
+  },
+  {
+    bab: 9, babTitle: "Bab 9: Walisongo",
+    text: "Fokus utama dakwah Sunan Drajat adalah...",
+    options: ["Mengajarkan ilmu falak dan perbintangan kepada para nelayan","Menggalang dana dari para bangsawan untuk membangun istana","Menyantuni anak yatim, fakir miskin, dan orang-orang telantar","Mengarang kitab-kitab fikih kontemporer berbahasa Arab","Memimpin pasukan perang melawan kerajaan asing"],
+    answer: 2,
+    penjelasan: "Sunan Drajat jiwanya sosial abis. Falsafah beliau condong ke kesejahteraan rakyat bawah. Beliau selalu mengutamakan ngurusin anak yatim dan fakir miskin terlebih dahulu."
+  },
+  {
+    bab: 9, babTitle: "Bab 9: Walisongo",
+    text: "Sunan Gunung Jati (Syarif Hidayatullah) memusatkan penyebaran Islam di wilayah...",
+    options: ["Jawa Timur (Surabaya dan sekitarnya)","Jawa Tengah (Demak dan Kudus)","Jawa Barat (Cirebon dan Banten)","Bali dan Lombok","Sumatra Selatan"],
+    answer: 2,
+    penjelasan: "Kalau denger nama Sunan Gunung Jati, arahin ke Cirebon dan Banten. Beliau satu-satunya Walisongo yang sekalian jadi Sultan, sehingga dakwah dan politik bisa jalan bareng."
+  },
+  {
+    bab: 9, babTitle: "Bab 9: Walisongo",
+    text: "Salah satu nilai keteladanan utama dari perjuangan Walisongo yang relevan diterapkan saat ini adalah...",
+    options: ["Memaksakan pendapat keagamaan kepada orang lain","Menjaga persatuan dan berdakwah dengan cara yang santun serta damai","Memisahkan diri dari kehidupan sosial masyarakat umum","Menolak segala bentuk kebudayaan modern dari luar","Mengutamakan kepentingan kelompok di atas kepentingan umum"],
+    answer: 1,
+    penjelasan: "Pelajaran berharga dari Walisongo: Berdakwah atau ngajak kebaikan itu kudu santun, damai, dan ngejaga persatuan. Gak usah pake urat, bentak-bentak, atau bikin rusuh."
+  },
+
+  // ===== BAB 10 =====
+  {
+    bab: 10, babTitle: "Bab 10: Ulama Indonesia",
+    text: "Ulama besar asal Banten yang pernah menjadi Imam Besar Masjidil Haram di Mekkah dan mendapat julukan Sayyid Ulama al-Hijaz adalah...",
+    options: ["Syekh Yusuf al-Makassari","Syekh Nawawi al-Bantani","Syekh Abdus Samad al-Palimbani","Nuruddin ar-Raniri","Hamzah Fansuri"],
+    answer: 1,
+    penjelasan: "Inget: ulama Banten yang Go International sampai dapet gelar 'Pemimpin Ulama Hijaz' (Mekkah-Madinah) itu namanya Syekh Nawawi al-Bantani. Kitab-kitabnya dipelajari di seluruh dunia Islam."
+  },
+  {
+    bab: 10, babTitle: "Bab 10: Ulama Indonesia",
+    text: "Salah satu karya monumental dari Syekh Nawawi al-Bantani di bidang tafsir Al-Qur'an yang terkenal adalah...",
+    options: ["Tafsir al-Azhar","Tafsir al-Misbah","Tafsir Marah Labid (Tafsir al-Munir)","Tafsir Jalalain","Kitab Siyarus Salikin"],
+    answer: 2,
+    penjelasan: "Nama tafsir bikinannya yang hits banget di dunia pesantren dan internasional itu Tafsir Marah Labid. Bukti otentik bahwa ulama Indonesia itu otaknya jenius!"
+  },
+  {
+    bab: 10, babTitle: "Bab 10: Ulama Indonesia",
+    text: "Syekh Yusuf Abul Mahasin Tajul Khalwati al-Makassari berjuang gigih melawan penjajah Belanda bersama...",
+    options: ["Sultan Iskandar Muda di Aceh","Sultan Ageng Tirtayasa di Banten","Sultan Agung di Mataram","Pattimura di Maluku","Sultan Baabullah di Ternate"],
+    answer: 1,
+    penjelasan: "Meskipun aslinya dari Makassar, pas pulang merantau, beliau membantu Sultan Ageng Tirtayasa di Banten untuk perang gerilya melawan VOC Belanda. Kombinasi ulama-pejuang fisik!"
+  },
+  {
+    bab: 10, babTitle: "Bab 10: Ulama Indonesia",
+    text: "Akibat perlawanannya yang merepotkan, Syekh Yusuf al-Makassari akhirnya ditangkap dan diasingkan ke...",
+    options: ["Malaysia dan Thailand","Arab Saudi dan Mesir","Sri Lanka (Ceylon) dan Afrika Selatan (Cape Town)","Belanda dan Inggris","Australia dan Selandia Baru"],
+    answer: 2,
+    penjelasan: "Belanda saking takutnya ama pengaruh Syekh Yusuf, beliau dibuang ke Sri Lanka lalu dipindahin ke Afrika Selatan. Tapi di tempat pembuangan, beliau malah sukses bikin komunitas muslim baru!"
+  },
+  {
+    bab: 10, babTitle: "Bab 10: Ulama Indonesia",
+    text: "Ulama terkemuka dari Palembang yang terkenal dengan karyanya Hidayatus Salikin dan vokal mengobarkan semangat jihad melawan penjajah adalah...",
+    options: ["Syekh Abdus Samad al-Palimbani","Syekh Hamzah Fansuri","Syekh Abdul Rauf as-Singkili","Syekh Muhammad Arsyad al-Banjari","Syekh Ahmad Khatib al-Minangkabawi"],
+    answer: 0,
+    penjelasan: "Sesuai nama belakangnya 'al-Palimbani' (dari Palembang). Beliau nulis kitab tasawuf Hidayatus Salikin sekaligus nulis surat-surat provokasi positif untuk ngebakar mental pemuda Nusantara."
+  },
+  {
+    bab: 10, babTitle: "Bab 10: Ulama Indonesia",
+    text: "Kitab Siyarus Salikin karya Syekh Abdus Samad al-Palimbani merupakan saduran dari kitab monumental karya Imam al-Ghazali yang berjudul...",
+    options: ["Minhajul Abidin","Ihya Ulumuddin","Bidayatul Hidayah","Tahafut al-Falasifah","Kimiyatus Sa'adah"],
+    answer: 1,
+    penjelasan: "Kitab Ihya Ulumuddin karya Imam al-Ghazali tebel dan bahasanya tinggi. Nah, disadur dan dijelasin ulang biar gampang dipahami orang Melayu lewat kitab Siyarus Salikin."
+  },
+  {
+    bab: 10, babTitle: "Bab 10: Ulama Indonesia",
+    text: "Tokoh ulama Nusantara yang menjadi jembatan transmisi ilmu dari ulama Haromain (Mekkah-Madinah) ke Indonesia pada abad ke-17 adalah...",
+    options: ["Syekh Abdul Rauf as-Singkili dan Syekh Yusuf al-Makassari","K.H. Hasyim Asy'ari dan K.H. Ahmad Dahlan","Buya Hamka dan Mohammad Natsir","Syekh Ahmad Mutamakkin dan Raden Santri","Syekh Siti Jenar dan Sunan Kalijaga"],
+    answer: 0,
+    penjelasan: "Abad ke-17 itu eranya murid dari Nusantara belajar ke Mekkah. Tokoh utama yang jadi jembatan sanad ilmu ya dua ini: As-Singkili (Aceh) dan Al-Makassari (Sulsel)."
+  },
+  {
+    bab: 10, babTitle: "Bab 10: Ulama Indonesia",
+    text: "Salah satu peran penting Syekh Muhammad Arsyad al-Banjari dalam bidang hukum Islam di Kesultanan Banjar adalah...",
+    options: ["Mendirikan partai politik Islam pertama","Mengganti ideologi kesultanan secara paksa","Menyusun kitab hukum Sabilal Muhtadin dan membentuk Mahkamah Syariah","Melarang perdagangan dengan pihak luar kesultanan","Menghapus sistem kerajaan menjadi republik"],
+    answer: 2,
+    penjelasan: "Syekh Arsyad al-Banjari itu pembaharu hukum di Banjar. Beliau nulis kitab Sabilal Muhtadin (rujukan hukum fikih se-Asia Tenggara) sekaligus membentuk struktur peradilan agama."
+  },
+  {
+    bab: 10, babTitle: "Bab 10: Ulama Indonesia",
+    text: "Ulama Indonesia tempo dulu tidak hanya mengajar di pesantren, tetapi juga ikut terjun di medan perang. Hal ini menunjukkan bahwa...",
+    options: ["Ulama tidak suka dengan kegiatan belajar mengajar yang monoton","Ajaran Islam menyatukan kesalehan ritual, ilmu pengetahuan, dan kewajiban membela tanah air","Ulama dipaksa oleh pihak kerajaan untuk ikut bertempur","Persenjataan militer milik ulama lebih canggih daripada tentara reguler","Medan perang merupakan tempat terbaik untuk mencari kekayaan"],
+    answer: 1,
+    penjelasan: "Dalam Islam, bela negara dari penjajah itu bagian dari iman (jihad). Para ulama kita otaknya encer di meja belajar, tapi fisiknya juga tangguh di medan perang. Seimbang!"
+  },
+  {
+    bab: 10, babTitle: "Bab 10: Ulama Indonesia",
+    text: "Sikap yang paling tepat dalam meneladani perjuangan para tokoh ulama Nusantara sebagai pelajar adalah...",
+    options: ["Malas belajar dan menyerahkan masa depan pada nasib","Rajin menuntut ilmu dengan sungguh-sungguh, menjaga akhlak mulia, dan cinta tanah air","Memusuhi teman-teman yang berbeda suku dan pandangan","Mengisolasi diri dari perkembangan teknologi modern","Menuntut hak tanpa mau menjalankan kewajiban sebagai warga negara"],
+    answer: 1,
+    penjelasan: "Gak usah muluk-muluk ikut perang fisik sekarang. Cara meneladani mereka cukup dengan belajar yang rajin, punya sopan santun, dan sayang ama negara sendiri."
+  }
+];
+
+// State
+const userAnswers = {};
+let currentBab = 'all';
+
+function getTabs() {
+  return ['all', 6, 7, 8, 9, 10];
+}
+
+function getLabel(tab) {
+  if (tab === 'all') return 'Semua Bab';
+  const titles = {6:'Bab 6',7:'Bab 7',8:'Bab 8',9:'Bab 9',10:'Bab 10'};
+  return titles[tab];
+}
+
+function renderTabs() {
+  const wrap = document.getElementById('tabsWrap');
+  wrap.innerHTML = '';
+  getTabs().forEach(tab => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (currentBab === tab ? ' active' : '');
+    btn.textContent = getLabel(tab);
+    btn.onclick = () => { currentBab = tab; renderAll(); };
+    wrap.appendChild(btn);
+  });
+}
+
+function getFilteredQuestions() {
+  if (currentBab === 'all') return ALL_QUESTIONS;
+  return ALL_QUESTIONS.filter(q => q.bab === currentBab);
+}
+
+function updateStats() {
+  const total = ALL_QUESTIONS.length;
+  const answered = Object.keys(userAnswers).length;
+  const correct = Object.values(userAnswers).filter(v => v.correct).length;
+  const wrong = answered - correct;
+  const unanswered = total - answered;
+
+  document.getElementById('progressFill').style.width = (answered / total * 100) + '%';
+  document.getElementById('progressLabel').textContent = answered + ' dari ' + total + ' soal dijawab';
+  document.getElementById('correctCount').textContent = correct;
+  document.getElementById('wrongCount').textContent = wrong;
+  document.getElementById('unansweredCount').textContent = unanswered;
+}
+
+function renderQuestions() {
+  const container = document.getElementById('questionsContainer');
+  const filtered = getFilteredQuestions();
+  container.innerHTML = '';
+
+  // Final score card if all answered
+  const allAnswered = Object.keys(userAnswers).length === ALL_QUESTIONS.length;
+  if (allAnswered && currentBab === 'all') {
+    const correct = Object.values(userAnswers).filter(v => v.correct).length;
+    const pct = Math.round(correct / ALL_QUESTIONS.length * 100);
+    const emoji = pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '📚';
+    const msg = pct >= 80 ? 'Mantap! Kamu siap ujian ASAS!' : pct >= 60 ? 'Lumayan, tinggal kuatkan yang salah!' : 'Yuk baca lagi materinya, kamu pasti bisa!';
+    const card = document.createElement('div');
+    card.className = 'final-score-card';
+    card.innerHTML = `<h2>${emoji} Semua Soal Selesai!</h2>
+      <div class="final-score-big">${correct}<span style="font-size:1.5rem;opacity:0.7">/${ALL_QUESTIONS.length}</span></div>
+      <p style="font-size:0.9rem;font-weight:600;margin-bottom:4px">${pct}% Benar</p>
+      <p>${msg}</p>`;
+    container.appendChild(card);
+
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'reset-btn';
+    resetBtn.textContent = '🔄 Ulangi Semua Soal';
+    resetBtn.onclick = () => { Object.keys(userAnswers).forEach(k => delete userAnswers[k]); renderAll(); };
+    container.appendChild(resetBtn);
+  }
+
+  filtered.forEach((q, idx) => {
+    const globalIdx = ALL_QUESTIONS.indexOf(q);
+    const answered = userAnswers[globalIdx];
+    const card = document.createElement('div');
+    card.className = 'question-card' + (answered ? (answered.correct ? ' answered-correct' : ' answered-wrong') : '');
+    card.id = 'qcard-' + globalIdx;
+
+    let statusIcon = '';
+    if (answered) statusIcon = answered.correct ? '✅' : '❌';
+
+    let ayatHtml = q.ayat ? `<div class="q-ayat">${q.ayat}</div>` : '';
+
+    const letters = ['A','B','C','D','E'];
+    let optionsHtml = '<ul class="options-list">';
+    q.options.forEach((opt, oi) => {
+      let cls = 'option-btn';
+      if (answered) {
+        if (oi === q.answer) cls += ' correct-answer';
+        else if (answered.chosen === oi && oi !== q.answer) cls += ' wrong-answer';
+        else cls += ' dimmed';
+      }
+      optionsHtml += `<li><button class="${cls}" ${answered ? 'disabled' : ''} onclick="handleAnswer(${globalIdx}, ${oi})">
+        <span class="opt-letter">${letters[oi]}</span>
+        <span class="opt-text">${opt}</span>
+      </button></li>`;
+    });
+    optionsHtml += '</ul>';
+
+    let feedbackHtml = '';
+    if (answered) {
+      const isCorrect = answered.correct;
+      const feedClass = isCorrect ? 'correct' : 'wrong';
+      const icon = isCorrect ? '✅' : '❌';
+      const header = isCorrect ? 'Benar! Kamu berhasil!' : `Salah! Jawaban yang benar: ${letters[q.answer]}. ${q.options[q.answer]}`;
+      feedbackHtml = `<div class="feedback-box ${feedClass} show">
+        <div class="feedback-header">${icon} ${header}</div>
+        <div class="feedback-penjelasan"><strong>💡 Penjelasan:</strong> ${q.penjelasan}</div>
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-meta">
+        <span class="q-num">No. ${globalIdx + 1}</span>
+        <span class="q-bab">${q.babTitle}</span>
+        <span class="q-status-icon">${statusIcon}</span>
+      </div>
+      <div class="q-text">${q.text}</div>
+      ${ayatHtml}
+      ${optionsHtml}
+      ${feedbackHtml}
+    `;
+    container.appendChild(card);
+  });
+}
+
+function handleAnswer(globalIdx, chosenIdx) {
+  const q = ALL_QUESTIONS[globalIdx];
+  userAnswers[globalIdx] = { chosen: chosenIdx, correct: chosenIdx === q.answer };
+  updateStats();
+  renderQuestions();
+  // Scroll to the answered card
+  setTimeout(() => {
+    const el = document.getElementById('qcard-' + globalIdx);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 60);
+}
+
+function renderAll() {
+  renderTabs();
+  renderQuestions();
+  updateStats();
+}
+
+renderAll();
+</script>
+</body>
+</html>
